@@ -11,7 +11,6 @@ package test.view{
 	import flash.events.TimerEvent;
 	import flash.net.URLRequest;
 	import flash.text.TextField;
-	import flash.utils.Timer;
 	
 	public class mainView extends Sprite{
 		
@@ -29,7 +28,7 @@ package test.view{
 			black.graphics.drawRect(0, 0, 300, 300);
 			black.graphics.endFill();
 			
-			this.addChild(black);
+			addChild(black);
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
@@ -49,22 +48,24 @@ package test.view{
 		}
 		
 		private function loadSecurityError(e:SecurityErrorEvent):void{
-			trace(e.text);
+			trace('black securityError'+e.text);
 		}
 		
 		private function loadProgress(e:ProgressEvent):void{
-			trace('mainView loadProgress', e.bytesLoaded/e.bytesTotal);
+			trace('black loadProgress', e.bytesLoaded/e.bytesTotal);
 		}
 		
 		private function loadIOError(e:IOErrorEvent):void{
-			trace('mainView loadIOError', e.text );
+			trace('black loadIOError', e.text );
 		}
 		
 		private function loadComplete(e:Event):void{
 			
-			trace('mainView loadComplete');
+			trace('red loaded');
 			
 			loadedSWF = e.currentTarget.content as Sprite;
+			
+			loadedSWF.addEventListener('greenLoaded', changeGreen);
 			
 			(loadedSWF.getChildByName('caption') as TextField).text += ' - black';
 			
@@ -74,19 +75,16 @@ package test.view{
 			loader.removeEventListener(IOErrorEvent.IO_ERROR, loadIOError);
 			
 			loader = null;
-			
-			var timer:Timer = new Timer(1000);
-			timer.addEventListener(TimerEvent.TIMER, checkGreen);
-			timer.start();
 		}
 		
-		private function checkGreen(e:TimerEvent):void{
-			if( loadedSWF.getChildByName('swfName') != null ){
-				(((loadedSWF.getChildByName((loadedSWF.getChildByName('swfName') as TextField).text) as Sprite).getChildByName('green_mc') as Sprite).getChildByName('caption') as TextField).text += ' - black';
-				(e.currentTarget as Timer).stop();
+		private function changeGreen(e:*):void{
+			trace('changeGreen', e.body);
+			
+			if( e.body != null && loadedSWF.getChildByName(e.body) != null ){
+				(((loadedSWF.getChildByName(e.body) as Sprite).getChildByName('green_mc') as Sprite).getChildByName('caption') as TextField).text += ' - black';
 			}
-				
 		}
+
 	}
 	
 }
