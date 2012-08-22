@@ -20,9 +20,10 @@ package test.view{
 		
 		private	var caption:TextField = new TextField();
 		
-		private var manager:testFlashManager;
+		private var manager:testFlashManager = new testFlashManager();
 		
 		private var requests:Array = new Array();
+		private var flash_ids:Array = new Array();
 		private var loaded_swf:Array = new Array();
 		private var xC:int = 150;
 		
@@ -55,6 +56,9 @@ package test.view{
 			requests.push('testFlashLoaded.swf');
 			requests.push('testFlash.swf');
 			
+			flash_ids.push('red');
+			flash_ids.push('blue');
+			
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
 		}
 		
@@ -86,13 +90,11 @@ package test.view{
 		
 		private function loadComplete(e:Event):void{
 			
-			trace('red loaded');
+			trace('swf loaded');
 			
 			loadedSWF = e.currentTarget.content as Sprite;
 			
-			manager = new testFlashManager();
-			
-			manager.registerCall(loadedSWF);
+			manager.registerCall(loadedSWF, flash_ids.splice(0,1));
 			
 			//loaded_swf.push(loadedSWF);
 			//loadedSWF.addEventListener('swfEvent', changeRed);

@@ -11,7 +11,7 @@ package{
 
 		override public function execute():void{
 			
-			trace('testFlashRun', Security.sandboxType);
+			//trace('testFlashRun', Security.sandboxType);
 			Security.allowDomain('*');
 			Security.allowInsecureDomain('*');
 			
